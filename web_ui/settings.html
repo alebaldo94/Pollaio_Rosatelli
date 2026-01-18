@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pollaio Automatizzato - Impostazioni</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Pollaio Automatizzato</h1>
+        <nav>
+            <a href="index.html">Dashboard</a>
+            <a href="settings.html" class="active">Impostazioni</a>
+        </nav>
+        <div class="connection-status">
+            <span class="connection-dot" id="connectionDot"></span>
+            <span id="connectionText">Disconnesso</span>
+        </div>
+    </header>
+
+    <main>
+        <h2 class="section-title">Configurazione Sistema</h2>
+
+        <!-- Automazione Porta -->
+        <section class="settings-section">
+            <h2>Automazione Porta</h2>
+
+            <div class="form-group">
+                <label class="toggle-label">
+                    <span class="form-label">Abilita apertura/chiusura automatica</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="portaAutoEnabled" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Modalità orario</label>
+                <select class="form-select" id="portaOrarioMode">
+                    <option value="alba_tramonto">Alba/Tramonto automatico</option>
+                    <option value="orario_fisso">Orario fisso</option>
+                    <option value="luminosita">Basato su luminosità</option>
+                </select>
+                <p class="form-hint">Alba/Tramonto usa le coordinate GPS per calcolare gli orari</p>
+            </div>
+
+            <div class="form-row" id="orarioFissoSection" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Orario apertura</label>
+                    <input type="time" class="form-input" id="portaOraApertura" value="06:30">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Orario chiusura</label>
+                    <input type="time" class="form-input" id="portaOraChiusura" value="20:00">
+                </div>
+            </div>
+
+            <div class="form-row" id="luminositaSection" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Soglia apertura (lux)</label>
+                    <input type="number" class="form-input" id="portaLuxApertura" value="100" min="0" max="10000">
+                    <p class="form-hint">Apri quando luminosità supera questa soglia</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Soglia chiusura (lux)</label>
+                    <input type="number" class="form-input" id="portaLuxChiusura" value="50" min="0" max="10000">
+                    <p class="form-hint">Chiudi quando luminosità scende sotto questa soglia</p>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Ritardo apertura (minuti)</label>
+                    <input type="number" class="form-input" id="portaRitardoApertura" value="0" min="0" max="120">
+                    <p class="form-hint">Ritardo dopo alba/soglia prima di aprire</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ritardo chiusura (minuti)</label>
+                    <input type="number" class="form-input" id="portaRitardoChiusura" value="30" min="0" max="120">
+                    <p class="form-hint">Ritardo dopo tramonto/soglia prima di chiudere</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Soglie Sensori -->
+        <section class="settings-section">
+            <h2>Soglie Allarme Sensori</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Temperatura minima (°C)</label>
+                    <input type="number" class="form-input" id="tempMin" value="5" min="-20" max="50">
+                    <p class="form-hint">Allarme sotto questa temperatura</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Temperatura massima (°C)</label>
+                    <input type="number" class="form-input" id="tempMax" value="35" min="-20" max="50">
+                    <p class="form-hint">Allarme sopra questa temperatura</p>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Umidità minima (%)</label>
+                    <input type="number" class="form-input" id="umidMin" value="30" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Umidità massima (%)</label>
+                    <input type="number" class="form-input" id="umidMax" value="80" min="0" max="100">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Livello acqua minimo (%)</label>
+                    <input type="number" class="form-input" id="acquaMin" value="20" min="0" max="100">
+                    <p class="form-hint">Allarme quando acqua sotto questa soglia</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Livello mangime minimo (%)</label>
+                    <input type="number" class="form-input" id="mangimeMin" value="20" min="0" max="100">
+                    <p class="form-hint">Allarme quando mangime sotto questa soglia</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ventilazione Automatica -->
+        <section class="settings-section">
+            <h2>Ventilazione Automatica</h2>
+
+            <div class="form-group">
+                <label class="toggle-label">
+                    <span class="form-label">Abilita ventilazione automatica</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="ventAutoEnabled" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Attiva sopra temperatura (°C)</label>
+                    <input type="number" class="form-input" id="ventTempOn" value="28" min="0" max="50">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Disattiva sotto temperatura (°C)</label>
+                    <input type="number" class="form-input" id="ventTempOff" value="25" min="0" max="50">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Attiva sopra umidità (%)</label>
+                <input type="number" class="form-input" id="ventUmidOn" value="75" min="0" max="100" style="max-width: 200px;">
+            </div>
+        </section>
+
+        <!-- Illuminazione -->
+        <section class="settings-section">
+            <h2>Illuminazione Supplementare</h2>
+
+            <div class="form-group">
+                <label class="toggle-label">
+                    <span class="form-label">Abilita illuminazione automatica invernale</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="luceAutoEnabled">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+                <p class="form-hint">Integra luce artificiale per garantire 14-16 ore di luce/giorno</p>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Ore di luce obiettivo</label>
+                    <input type="number" class="form-input" id="luceDurata" value="15" min="10" max="18">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Intensità luce (%)</label>
+                    <input type="number" class="form-input" id="luceIntensita" value="80" min="10" max="100">
+                </div>
+            </div>
+        </section>
+
+        <!-- Configurazione Video -->
+        <section class="settings-section">
+            <h2>Stream Video</h2>
+
+            <div class="form-group">
+                <label class="form-label">URL Stream Camera Interna</label>
+                <input type="text" class="form-input" id="videoUrlInterno" placeholder="http://192.168.1.100:8080/video">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">URL Stream Camera Esterna</label>
+                <input type="text" class="form-input" id="videoUrlEsterno" placeholder="http://192.168.1.101:8080/video">
+            </div>
+        </section>
+
+        <!-- Configurazione Sistema -->
+        <section class="settings-section">
+            <h2>Sistema</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Intervallo aggiornamento (secondi)</label>
+                    <input type="number" class="form-input" id="updateInterval" value="5" min="1" max="60">
+                    <p class="form-hint">Frequenza polling sensori</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Timeout heartbeat ESP32 (secondi)</label>
+                    <input type="number" class="form-input" id="heartbeatTimeout" value="120" min="30" max="600">
+                    <p class="form-hint">Tempo massimo senza heartbeat prima di allarme</p>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Latitudine</label>
+                    <input type="number" class="form-input" id="geoLat" value="43.7" step="0.0001">
+                    <p class="form-hint">Per calcolo alba/tramonto</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Longitudine</label>
+                    <input type="number" class="form-input" id="geoLon" value="12.9" step="0.0001">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">URL Backend API</label>
+                <input type="text" class="form-input" id="apiUrl" value="http://localhost:5000/api">
+                <p class="form-hint">Endpoint REST del server Raspberry Pi</p>
+            </div>
+        </section>
+
+        <!-- Notifiche -->
+        <section class="settings-section">
+            <h2>Notifiche</h2>
+
+            <div class="form-group">
+                <label class="toggle-label">
+                    <span class="form-label">Abilita notifiche browser</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notifBrowserEnabled" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="toggle-label">
+                    <span class="form-label">Abilita notifiche Telegram</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notifTelegramEnabled">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+            </div>
+
+            <div id="telegramSection" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Bot Token Telegram</label>
+                    <input type="text" class="form-input" id="telegramToken" placeholder="123456789:ABCdefGHI...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Chat ID</label>
+                    <input type="text" class="form-input" id="telegramChatId" placeholder="123456789">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Tipologie notifiche</label>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="notifAllarmi" checked>
+                        <span>Allarmi (temperature, livelli bassi)</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="notifPorta" checked>
+                        <span>Movimenti porta</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="notifEsp" checked>
+                        <span>Stato ESP32 (online/offline)</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="notifManutenzione">
+                        <span>Promemoria manutenzione</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buttons -->
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+            <button class="btn btn-secondary" onclick="resetSettings()">Ripristina Default</button>
+            <button class="btn btn-primary" onclick="saveSettings()">Salva Impostazioni</button>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <footer>
+        <p>Pollaio Automatizzato - Colli al Metauro | Versione 1.0</p>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // Toggle visibility based on selections
+        document.getElementById('portaOrarioMode').addEventListener('change', function() {
+            document.getElementById('orarioFissoSection').style.display =
+                this.value === 'orario_fisso' ? 'grid' : 'none';
+            document.getElementById('luminositaSection').style.display =
+                this.value === 'luminosita' ? 'grid' : 'none';
+        });
+
+        document.getElementById('notifTelegramEnabled').addEventListener('change', function() {
+            document.getElementById('telegramSection').style.display =
+                this.checked ? 'block' : 'none';
+        });
+
+        // Load settings on page load
+        document.addEventListener('DOMContentLoaded', loadSettings);
+    </script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pollaio Automatizzato - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Pollaio Automatizzato</h1>
+        <nav>
+            <a href="index.html" class="active">Dashboard</a>
+            <a href="settings.html">Impostazioni</a>
+        </nav>
+        <div class="connection-status">
+            <span class="connection-dot" id="connectionDot"></span>
+            <span id="connectionText">Disconnesso</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- Video Streams -->
+        <section class="video-section">
+            <h2 class="section-title">Video Sorveglianza</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="video-label">Camera Interna</div>
+                    <div class="video-container">
+                        <img id="videoInterno" src="" alt="Stream interno"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div class="video-placeholder" style="display:none;">
+                            <p>Stream non disponibile</p>
+                            <p style="font-size:0.8rem;">Verifica connessione camera</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="video-label">Camera Esterna</div>
+                    <div class="video-container">
+                        <img id="videoEsterno" src="" alt="Stream esterno"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div class="video-placeholder" style="display:none;">
+                            <p>Stream non disponibile</p>
+                            <p style="font-size:0.8rem;">Verifica connessione camera</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sensor Cards -->
+        <section class="sensors-section">
+            <h2 class="section-title">Stato Sensori</h2>
+            <div class="grid-4">
+                <!-- Porta -->
+                <div class="card" id="cardPorta">
+                    <div class="card-header">
+                        <span class="card-title">Porta</span>
+                        <span class="status-indicator closed" id="portaStatus">
+                            <span class="status-dot"></span>
+                            <span id="portaStatusText">Chiusa</span>
+                        </span>
+                    </div>
+                    <div class="card-value small" id="portaValue">--</div>
+                    <div class="card-footer">
+                        Ultimo movimento: <span id="portaLastMove">--</span>
+                    </div>
+                </div>
+
+                <!-- Temperatura -->
+                <div class="card" id="cardTemperatura">
+                    <div class="card-header">
+                        <span class="card-title">Temperatura</span>
+                    </div>
+                    <div class="card-value">
+                        <span id="temperaturaValue">--</span>
+                        <span class="card-unit">°C</span>
+                    </div>
+                    <div class="card-footer">
+                        Min: <span id="tempMin">--</span>°C | Max: <span id="tempMax">--</span>°C
+                    </div>
+                </div>
+
+                <!-- Umidità -->
+                <div class="card" id="cardUmidita">
+                    <div class="card-header">
+                        <span class="card-title">Umidità</span>
+                    </div>
+                    <div class="card-value">
+                        <span id="umiditaValue">--</span>
+                        <span class="card-unit">%</span>
+                    </div>
+                    <div class="card-footer">
+                        Livello: <span id="umiditaLevel">--</span>
+                    </div>
+                </div>
+
+                <!-- Luminosità -->
+                <div class="card" id="cardLuminosita">
+                    <div class="card-header">
+                        <span class="card-title">Luminosità</span>
+                    </div>
+                    <div class="card-value">
+                        <span id="luminositaValue">--</span>
+                        <span class="card-unit">lux</span>
+                    </div>
+                    <div class="card-footer">
+                        Stato: <span id="luminositaStatus">--</span>
+                    </div>
+                </div>
+
+                <!-- Livello Acqua -->
+                <div class="card" id="cardAcqua">
+                    <div class="card-header">
+                        <span class="card-title">Livello Acqua</span>
+                        <span class="status-indicator ok" id="acquaStatus">
+                            <span id="acquaStatusText">OK</span>
+                        </span>
+                    </div>
+                    <div class="card-value">
+                        <span id="acquaValue">--</span>
+                        <span class="card-unit">%</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-bar-fill ok" id="acquaBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Livello Mangime -->
+                <div class="card" id="cardMangime">
+                    <div class="card-header">
+                        <span class="card-title">Livello Mangime</span>
+                        <span class="status-indicator ok" id="mangimeStatus">
+                            <span id="mangimeStatusText">OK</span>
+                        </span>
+                    </div>
+                    <div class="card-value">
+                        <span id="mangimeValue">--</span>
+                        <span class="card-unit">%</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-bar-fill ok" id="mangimeBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- ESP32 Status -->
+                <div class="card" id="cardEsp1">
+                    <div class="card-header">
+                        <span class="card-title">ESP32 Porta</span>
+                        <span class="status-indicator ok" id="esp1Status">
+                            <span class="status-dot"></span>
+                            <span id="esp1StatusText">Online</span>
+                        </span>
+                    </div>
+                    <div class="card-footer">
+                        Ultimo heartbeat: <span id="esp1Heartbeat">--</span>
+                    </div>
+                </div>
+
+                <div class="card" id="cardEsp2">
+                    <div class="card-header">
+                        <span class="card-title">ESP32 Ambiente</span>
+                        <span class="status-indicator ok" id="esp2Status">
+                            <span class="status-dot"></span>
+                            <span id="esp2StatusText">Online</span>
+                        </span>
+                    </div>
+                    <div class="card-footer">
+                        Ultimo heartbeat: <span id="esp2Heartbeat">--</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manual Commands -->
+        <section class="command-panel">
+            <h2 class="section-title">Comandi Manuali</h2>
+            <div class="command-grid">
+                <div class="command-card">
+                    <h3>Controllo Porta</h3>
+                    <div class="command-buttons">
+                        <button class="btn btn-success" onclick="confirmCommand('apriPorta', 'Aprire la porta?')">
+                            Apri
+                        </button>
+                        <button class="btn btn-danger" onclick="confirmCommand('chiudiPorta', 'Chiudere la porta?')">
+                            Chiudi
+                        </button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h3>Illuminazione</h3>
+                    <div class="command-buttons">
+                        <button class="btn btn-warning" onclick="confirmCommand('accendiLuce', 'Accendere le luci?')">
+                            Accendi
+                        </button>
+                        <button class="btn btn-secondary" onclick="confirmCommand('spegniLuce', 'Spegnere le luci?')">
+                            Spegni
+                        </button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h3>Ventilazione</h3>
+                    <div class="command-buttons">
+                        <button class="btn btn-info" onclick="confirmCommand('accendiVentola', 'Attivare ventilazione?')" style="background: var(--info); color: white;">
+                            Attiva
+                        </button>
+                        <button class="btn btn-secondary" onclick="confirmCommand('spegniVentola', 'Disattivare ventilazione?')">
+                            Disattiva
+                        </button>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <h3>Override Automatismi</h3>
+                    <div class="command-buttons">
+                        <button class="btn btn-outline" id="btnOverride" onclick="toggleOverride()">
+                            Attiva Override
+                        </button>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;">
+                        Disabilita temporaneamente gli automatismi
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Log -->
+        <section class="events-section">
+            <h2 class="section-title">Ultimi Eventi</h2>
+            <div class="events-list" id="eventsList">
+                <div class="event-item">
+                    <span class="event-time">--</span>
+                    <span class="event-icon">--</span>
+                    <span class="event-message">Nessun evento registrato</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <h2>Conferma Azione</h2>
+            <p id="confirmMessage">Sei sicuro di voler eseguire questa azione?</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal()">Annulla</button>
+                <button class="btn btn-primary" id="confirmBtn" onclick="executeCommand()">Conferma</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <footer>
+        <p>Pollaio Automatizzato - Colli al Metauro | Ultimo aggiornamento: <span id="lastUpdate">--</span></p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
